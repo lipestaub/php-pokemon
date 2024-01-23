@@ -10,14 +10,18 @@ $route = $_SERVER['REQUEST_URI']; # Extração da rota para qual foi endereçada
 # resposta que for enviada pela nossa API.
 header('Content-Type: application/json');
 
-# Definição código de status HTTP. Tem por função principal informar ao client se houve algum erro durante a requisição.
+# Definição código de status HTTP. Tem por função principal informar ao client se houve algum erro ou comportamento inesperado
+# durante a requisição.
+#
 # Exemplos:
 #    - Códigos 2xx: indicam que a requisição foi bem sucedida e a resposta pode ser processada.
+#    - Códigos 3xx: indicam que o recurso que foi solicitado não se econtra mais no endereço que a pessoa informou/foi
+#                   movido.
 #    - Códigos 4xx: indicam que a requisição não está de acordo com o formato esperado pelo servidor para aquele
 #                   endpoint/função/método.
 #    - Códigos 5xx: indicam que houve algum erro interno do servidor durante o processamento da requisição pelo
 #                   servidor. Normalmente acontecem por erros em rotinas do próprio servidor e não porque a requisição
-#                    enviada não está de acordo com o que é esperado.
+#                   enviada não está de acordo com o que é esperado.
 #
 # O código 200 - OK é informado supondo que tudo correrá bem durante a execução das rotinas, mas pode ser sobreescrito
 # ao longo do processo para outro código em caso de comportamentos adversos.
@@ -113,6 +117,7 @@ function get($endpoint): array
     $ch = curl_init("$base/$endpoint");
 
     # Configurações diversas para a requisição.
+    #
     # Exemplo:
     #     - CURLOPT_RETURNTRANSFER: nos garante que vamos obter o resultado da chamada à API ao invés de somente
     #                               receber uma flag indicando se a chamada ocorreu corretamente ou não.
