@@ -105,6 +105,51 @@ if (preg_match('/\/\?page=[0-9]+/', $route) ) {
     exit;
 }
 
+# DESAFIO NÚMERO 3
+if (preg_match('/\/pokemon\/.+/', $route) ) {
+
+    # Mensagem para saber de onde os dados vieram.
+    $message = 'Read from file.';
+
+    # Extração do pokémon pesquisado da rota que informada na requisição
+    $searched = explode('/', substr($route, 1))[1];
+
+    # Aqui verificamos se o arquivo que salva os dados existe. Se não, indicado pela exclamação, entramos na sub-rotina
+    # do if.
+    if (!file_exists("$searched.txt")) {
+        # Atualizando a mensagem para sabermos que a sub-rotina de busca da API rodou.
+        $message = 'Fetched from API.';
+
+        # Chamando o método que faz a consulta à API, passando o nome do pokémon desejado.
+        $response = get("pokemon/$searched");
+
+         # Criação do formato base que desejamos que nossos dados sejam salvos
+        $formatted = [
+            'name' => $response['name'],
+            'stats' => []
+        ];
+
+        # Aqui percorremos os stats retornados pela API e populamos as chaves dos stats do nosso conteúdo formatado.
+        foreach ($response['stats'] as $stat) {
+            $formatted['stats'][$stat['stat']['name']] = $stat['base_stat'];
+        }
+
+        # Gravamos o arquivo com o nome do pokémon pesquisado e os dados formatados.
+        file_put_contents("$searched.txt", json_encode($formatted));
+    }
+    # Buscando os dados do nosso arquivo criado.
+    $fileContent = file_get_contents("$searched.txt");
+
+    # Aqui são impressos os dados que coletamos no formato JSON e é isso aqui que o client receberá.
+    echo json_encode([
+        'message' => $message,
+        'pokemon' => json_decode($fileContent)
+    ]);
+    exit;
+}
+
+
+
 # Função feita para buscar os dados da API do pokémon.
 # O parâmetro endpoint indica qual dos recursos da API que deve ser chamado.
 function get($endpoint): array
@@ -136,7 +181,15 @@ function get($endpoint): array
     # Fechamos a chamada que foi aberta e agora está concluída, para liberar recurso do servidor.
     curl_close($ch);
 
+    $decoded = json_decode($response, true);
+
+    if (!$decoded) {
+        http_response_code(404);
+        echo json_encode(['message' => 'Data not found']);
+        exit;
+    }
+
     # Retorno da resposta obtida da API para que possa ser tratada onde foi solicitada.
-    return json_decode($response, true);
+    return $decoded;
 }
 
