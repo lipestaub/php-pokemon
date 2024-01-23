@@ -1,5 +1,5 @@
 ```
-1 – Consumir a API do pokémon (https://pokeapi.co) e processar a resposta de acordo com os seguintes
+2 – Consumir a API do pokémon (https://pokeapi.co) e processar a resposta de acordo com os seguintes
     requisitos:
       1. Criar um endpoint para listar os pokémon.
       2. Caso não exista, gravar os registros da API em um arquivo .txt. Depois disso, as consultas devem
@@ -10,7 +10,7 @@
       5. Os dados devem ser retornados no formato JSON e conter um array com o nome dos pokémon
          retornados pela API.
 
-2 – Ainda seguindo na API do pokémon, vamos consultar as informações de um único pokémon:
+3 – Ainda seguindo na API do pokémon, vamos consultar as informações de um único pokémon:
       1. Criar um endpoint que vai receber o nome do pokémon (ex: localhost:8080/pokemon/pikachu) e
          retornar os dados do pokémon desejado.
       2. Os dados devem ser gravados em um arquivo .txt com o nome do respectivo pokémon, e uma vez
