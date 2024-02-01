@@ -106,13 +106,13 @@
             file_put_contents("$pokemonName.txt", json_encode($formatted));
         }
 
-        $fileContent = file_get_contents("$searched.txt");
+        $fileContent = file_get_contents("$pokemonName.txt");
 
         echo json_encode([
             'message' => $message,
             'pokemon' => json_decode($fileContent)
         ]);
-        
+
         exit;
     }
 ?>
